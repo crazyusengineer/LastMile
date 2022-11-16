@@ -1,0 +1,190 @@
+<html>
+<head>
+<title>route.ipynb</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #808080;}
+.s1 { color: #cc7832;}
+.s2 { color: #a9b7c6;}
+.s3 { color: #6897bb;}
+.s4 { color: #6a8759;}
+.s5 { color: #629755; font-style: italic;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+route.ipynb</font>
+</center></td></tr></table>
+<pre><span class="s0">#%% 
+</span><span class="s1">import </span><span class="s2">numpy </span><span class="s1">as </span><span class="s2">np</span>
+<span class="s1">import </span><span class="s2">random</span>
+<span class="s0">#%% 
+</span><span class="s2">money_arr = np.random.randint(</span><span class="s3">0</span><span class="s1">,</span><span class="s3">10</span><span class="s1">, </span><span class="s2">[</span><span class="s3">10</span><span class="s1">,</span><span class="s3">10</span><span class="s2">])</span>
+<span class="s0">#%% 
+</span><span class="s2">money_arr</span>
+<span class="s0">#%% 
+</span><span class="s2">time_arr = np.random.randint(</span><span class="s3">0</span><span class="s1">, </span><span class="s3">5</span><span class="s1">, </span><span class="s2">[</span><span class="s3">10</span><span class="s1">, </span><span class="s3">10</span><span class="s2">])</span>
+<span class="s0">#%% 
+</span><span class="s2">time_arr</span>
+<span class="s0">#%% 
+# comb_arr = np.zeros((10, 10), dtype=list)</span>
+<span class="s0"># comb_arr</span>
+<span class="s0">#%% 
+</span><span class="s2">comb_arr = []</span>
+<span class="s1">for </span><span class="s2">i </span><span class="s1">in </span><span class="s2">range(</span><span class="s3">10</span><span class="s2">):</span>
+    <span class="s2">row = [</span><span class="s3">0</span><span class="s2">] * </span><span class="s3">10</span>
+    <span class="s1">for </span><span class="s2">j </span><span class="s1">in </span><span class="s2">range(</span><span class="s3">10</span><span class="s2">):</span>
+        <span class="s2">row[j] = [money_arr[i][j]</span><span class="s1">, </span><span class="s2">time_arr[i][j]]</span>
+    <span class="s2">comb_arr.append(row)</span>
+<span class="s2">comb_arr</span>
+<span class="s0">#%% 
+</span><span class="s1">def </span><span class="s2">generate_blocks(num</span><span class="s1">, </span><span class="s2">comb_arr):</span>
+    <span class="s2">rand_x = []</span>
+    <span class="s2">rand_y = []</span>
+    <span class="s1">for </span><span class="s2">i </span><span class="s1">in </span><span class="s2">range(num):</span>
+        <span class="s2">rand_x.append(random.randint(</span><span class="s3">0</span><span class="s1">, </span><span class="s3">9</span><span class="s2">))</span>
+        <span class="s2">rand_y.append(random.randint(</span><span class="s3">0</span><span class="s1">, </span><span class="s3">9</span><span class="s2">))</span>
+    <span class="s1">for </span><span class="s2">j </span><span class="s1">in </span><span class="s2">range(num):</span>
+        <span class="s2">comb_arr[rand_x[j]][rand_y[j]] = [-</span><span class="s3">1</span><span class="s1">, </span><span class="s2">-</span><span class="s3">1</span><span class="s2">]</span>
+    <span class="s1">return </span><span class="s2">comb_arr</span>
+<span class="s0"># generate_blocks probably adding nums of blocks instead of generating nums</span>
+<span class="s2">generate_blocks(</span><span class="s3">5</span><span class="s1">, </span><span class="s2">comb_arr)</span>
+<span class="s2">comb_arr</span>
+<span class="s0">#%% 
+</span><span class="s1">def </span><span class="s2">direction(source</span><span class="s1">, </span><span class="s2">destination):</span>
+    <span class="s2">row_d = destination[</span><span class="s3">0</span><span class="s2">] - source[</span><span class="s3">0</span><span class="s2">]</span>
+    <span class="s2">col_d = destination[</span><span class="s3">1</span><span class="s2">] - source[</span><span class="s3">1</span><span class="s2">]</span>
+    <span class="s1">return </span><span class="s2">row_d</span><span class="s1">, </span><span class="s2">col_d</span>
+<span class="s0">#%% 
+</span><span class="s1">class </span><span class="s2">Graph:</span>
+
+    <span class="s1">def </span><span class="s2">__init__(self</span><span class="s1">, </span><span class="s2">vertices):</span>
+        <span class="s2">self.V = vertices  </span><span class="s0"># No. of vertices</span>
+        <span class="s2">self.graph = []</span>
+
+    <span class="s0"># function to add an edge to graph</span>
+    <span class="s1">def </span><span class="s2">addEdge(self</span><span class="s1">, </span><span class="s2">u</span><span class="s1">, </span><span class="s2">v</span><span class="s1">, </span><span class="s2">w):</span>
+        <span class="s2">self.graph.append([u</span><span class="s1">, </span><span class="s2">v</span><span class="s1">, </span><span class="s2">w])</span>
+
+    <span class="s0"># utility function used to print the solution</span>
+    <span class="s1">def </span><span class="s2">printArr(self</span><span class="s1">, </span><span class="s2">dist):</span>
+        <span class="s2">print(</span><span class="s4">&quot;Vertex Distance from Source&quot;</span><span class="s2">)</span>
+        <span class="s1">for </span><span class="s2">i </span><span class="s1">in </span><span class="s2">range(self.V):</span>
+            <span class="s2">print(</span><span class="s4">&quot;{0}</span><span class="s1">\t\t</span><span class="s4">{1}&quot;</span><span class="s2">.format(i</span><span class="s1">, </span><span class="s2">dist[i]))</span>
+
+    <span class="s0"># The main function that finds shortest distances from src to</span>
+    <span class="s0"># all other vertices using Bellman-Ford algorithm. The function</span>
+    <span class="s0"># also detects negative weight cycle</span>
+    <span class="s1">def </span><span class="s2">BellmanFord(self</span><span class="s1">, </span><span class="s2">src</span><span class="s1">, </span><span class="s2">dest):</span>
+
+        <span class="s0"># Step 1: Initialize distances from src to all other vertices</span>
+        <span class="s0"># as INFINITE</span>
+        <span class="s2">dist = [float(</span><span class="s4">&quot;Inf&quot;</span><span class="s2">)] * self.V</span>
+        <span class="s2">dist[src] = </span><span class="s3">0</span>
+
+        <span class="s0"># Step 2: Relax all edges |V| - 1 times. A simple shortest</span>
+        <span class="s0"># path from src to any other vertex can have at-most |V| - 1</span>
+        <span class="s0"># edges</span>
+        <span class="s1">for </span><span class="s2">_ </span><span class="s1">in </span><span class="s2">range(self.V - </span><span class="s3">1</span><span class="s2">):</span>
+            <span class="s0"># Update dist value and parent index of the adjacent vertices of</span>
+            <span class="s0"># the picked vertex. Consider only those vertices which are still in</span>
+            <span class="s0"># queue</span>
+            <span class="s1">for </span><span class="s2">u</span><span class="s1">, </span><span class="s2">v</span><span class="s1">, </span><span class="s2">w </span><span class="s1">in </span><span class="s2">self.graph:</span>
+                <span class="s1">if </span><span class="s2">dist[u] != float(</span><span class="s4">&quot;Inf&quot;</span><span class="s2">) </span><span class="s1">and </span><span class="s2">dist[u] + w &lt; dist[v]:</span>
+                    <span class="s2">dist[v] = dist[u] + w</span>
+
+        <span class="s0"># Step 3: check for negative-weight cycles. The above step</span>
+        <span class="s0"># guarantees shortest distances if graph doesn't contain</span>
+        <span class="s0"># negative weight cycle. If we get a shorter path, then there</span>
+        <span class="s0"># is a cycle.</span>
+
+        <span class="s1">for </span><span class="s2">u</span><span class="s1">, </span><span class="s2">v</span><span class="s1">, </span><span class="s2">w </span><span class="s1">in </span><span class="s2">self.graph:</span>
+            <span class="s1">if </span><span class="s2">dist[u] != float(</span><span class="s4">&quot;Inf&quot;</span><span class="s2">) </span><span class="s1">and </span><span class="s2">dist[u] + w &lt; dist[v]:</span>
+                <span class="s2">print(</span><span class="s4">&quot;Graph contains negative weight cycle&quot;</span><span class="s2">)</span>
+                <span class="s1">return</span>
+
+        <span class="s0"># print all distance</span>
+        <span class="s2">self.printArr(dist)</span>
+        <span class="s1">return </span><span class="s2">dist[dest]</span>
+
+<span class="s0">#%% 
+</span><span class="s2">ttl_vertex = </span><span class="s3">0</span>
+<span class="s2">accessible_vertex_coordinate = []</span>
+<span class="s2">accessible_vertex_id = []</span>
+<span class="s2">counter = </span><span class="s3">0</span>
+<span class="s1">for </span><span class="s2">i </span><span class="s1">in </span><span class="s2">range (</span><span class="s3">10</span><span class="s2">):</span>
+    <span class="s1">for </span><span class="s2">j </span><span class="s1">in </span><span class="s2">range (</span><span class="s3">10</span><span class="s2">):</span>
+        <span class="s1">if </span><span class="s2">comb_arr[i][j] != [-</span><span class="s3">1</span><span class="s1">, </span><span class="s2">-</span><span class="s3">1</span><span class="s2">]:</span>
+            <span class="s2">ttl_vertex += </span><span class="s3">1</span>
+            <span class="s2">accessible_vertex_coordinate.append([i</span><span class="s1">,</span><span class="s2">j])</span>
+            <span class="s2">accessible_vertex_id.append(counter)</span>
+        <span class="s2">counter += </span><span class="s3">1</span>
+<span class="s2">print(comb_arr)</span>
+<span class="s2">print(ttl_vertex)</span>
+<span class="s2">accessible_vertex_id</span>
+<span class="s0">#%% 
+</span><span class="s1">def </span><span class="s2">generate_edges(accessible_vertex</span><span class="s1">, </span><span class="s2">graph</span><span class="s1">, </span><span class="s2">comb_arr</span><span class="s1">, </span><span class="s2">preference</span><span class="s1">, </span><span class="s2">r_len):</span>
+    <span class="s5">&quot;&quot;&quot; 
+    r_len for row length, (e.g. 13 * 9, r_len = 13) 
+    size of the array should be given in previous functions 
+    return: 
+ 
+    &quot;&quot;&quot;</span>
+    <span class="s0"># preference = 0, time preferred</span>
+    <span class="s0"># preference = 1, money preferred</span>
+    <span class="s1">for </span><span class="s2">x </span><span class="s1">in </span><span class="s2">accessible_vertex:</span>
+        <span class="s2">id = x</span>
+        <span class="s2">up = id - r_len</span>
+        <span class="s2">down = id + r_len</span>
+        <span class="s2">right = id + </span><span class="s3">1</span>
+        <span class="s2">left = id - </span><span class="s3">1</span>
+        <span class="s1">if </span><span class="s2">up </span><span class="s1">in </span><span class="s2">accessible_vertex:</span>
+            <span class="s2">x = up // r_len</span>
+            <span class="s2">y = up % r_len</span>
+            <span class="s2">graph.addEdge(id</span><span class="s1">, </span><span class="s2">up</span><span class="s1">, </span><span class="s2">comb_arr[x][y][preference])</span>
+            <span class="s0"># print(&quot;edge added&quot;)</span>
+        <span class="s1">if </span><span class="s2">down </span><span class="s1">in </span><span class="s2">accessible_vertex:</span>
+            <span class="s2">x = down // r_len</span>
+            <span class="s2">y = down % r_len</span>
+            <span class="s2">graph.addEdge(id</span><span class="s1">, </span><span class="s2">down</span><span class="s1">, </span><span class="s2">comb_arr[x][y][preference])</span>
+            <span class="s0"># print(&quot;edge added&quot;)</span>
+        <span class="s1">if </span><span class="s2">right </span><span class="s1">in </span><span class="s2">accessible_vertex:</span>
+            <span class="s1">if </span><span class="s2">id % r_len != r_len - </span><span class="s3">1</span><span class="s2">:</span>
+                <span class="s2">x = right // r_len</span>
+                <span class="s2">y = right % r_len</span>
+                <span class="s2">graph.addEdge(id</span><span class="s1">, </span><span class="s2">right</span><span class="s1">, </span><span class="s2">comb_arr[x][y][preference])</span>
+                <span class="s0"># print(&quot;edge added&quot;)</span>
+        <span class="s1">if </span><span class="s2">left </span><span class="s1">in </span><span class="s2">accessible_vertex:</span>
+            <span class="s1">if </span><span class="s2">id % r_len != r_len:</span>
+                <span class="s2">x = left // r_len</span>
+                <span class="s2">y = left % r_len</span>
+                <span class="s2">graph.addEdge(id</span><span class="s1">, </span><span class="s2">left</span><span class="s1">, </span><span class="s2">comb_arr[x][y][preference])</span>
+                <span class="s0"># print(&quot;edge added&quot;)</span>
+<span class="s0">#%% 
+</span><span class="s2">g = Graph(</span><span class="s3">100</span><span class="s2">)</span>
+<span class="s2">generate_edges(accessible_vertex_id</span><span class="s1">, </span><span class="s2">g</span><span class="s1">, </span><span class="s2">comb_arr</span><span class="s1">, </span><span class="s3">0</span><span class="s1">, </span><span class="s3">10</span><span class="s2">)</span>
+<span class="s2">g.graph</span>
+<span class="s0"># g.BellmanFord(0)</span>
+<span class="s0">#%% 
+</span><span class="s2">g.BellmanFord(</span><span class="s3">2</span><span class="s1">,</span><span class="s3">1</span><span class="s2">)</span>
+<span class="s0">#%% 
+</span><span class="s1">def </span><span class="s2">route(source</span><span class="s1">, </span><span class="s2">dest</span><span class="s1">, </span><span class="s2">preference):</span>
+    <span class="s0"># preference = 0, time preferred</span>
+    <span class="s0"># preference = 1, money preferred</span>
+    <span class="s1">if </span><span class="s2">preference == </span><span class="s3">0</span><span class="s2">:</span>
+        <span class="s2">arr = time_arr</span>
+    <span class="s1">else</span><span class="s2">:</span>
+        <span class="s2">arr = money_arr</span>
+    <span class="s2">row_d</span><span class="s1">, </span><span class="s2">col_d = direction(source</span><span class="s1">, </span><span class="s2">dest)</span>
+    <span class="s0"># Deciding going left&amp;right up&amp;down</span>
+    <span class="s2">curr_point = source</span>
+    <span class="s2">route = []</span>
+    <span class="s1">while </span><span class="s2">row_d != </span><span class="s3">0 </span><span class="s1">and </span><span class="s2">col_d != </span><span class="s3">0</span><span class="s2">:</span>
+        <span class="s2">cost = arr[curr_point]</span>
+    <span class="s1">pass</span>
+<span class="s0">#%% 
+</span></pre>
+</body>
+</html>
