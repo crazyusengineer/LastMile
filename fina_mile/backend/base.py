@@ -1,3 +1,5 @@
+import json
+
 from flask import Flask, request, jsonify, abort
 
 # db = SQLAlchemy(Flask(__name__))
@@ -11,7 +13,7 @@ api = Flask(__name__)
 @api.route('/profile')
 def my_profile():
     response_body = {
-        "name": "Zhuo",
+        "name": "Zhuo Wang",
         "about": "Hello! I'm a full stack developer that loves python and javascript"
     }
 
@@ -24,3 +26,8 @@ def new_user():
     if not username or not password:
         abort(400)
     return {"status": "success"}
+
+# @api.route('/route')
+# def get_route(params_json):
+#     params = json.JSONDecoder()
+#     return params

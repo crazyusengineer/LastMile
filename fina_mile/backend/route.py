@@ -1,4 +1,5 @@
 import numpy as np
+import json
 
 ROW = 10
 COL = 10
@@ -129,6 +130,15 @@ def generate_blocks(num, comb_arr):
 
 
 def get_availability(comb_arr, row, col):
+    """
+    Generate an array with available points.
+    paras:
+        comb_arr: the combined array of time & money cost
+        row: row size of the comb_arr
+        col: column size of the comb_arr
+    return:
+        The total number of vertex, and available points with id
+    """
     ttl_vertex = 0
     accessible_vertex_coordinate = []
     accessible_vertex_id = []
@@ -147,8 +157,12 @@ def generate_edges(accessible_vertex, g, comb_arr, preference, r_len):
     """
     r_len for row length, (e.g. 13 * 9, r_len = 13)
     size of the array should be given in previous functions
+    paras:
+        accessible_vertex: list of id of vertex that are available
+        g: the groph
+        comb
     return:
-
+        None
     """
     # preference = 0, time preferred
     # preference = 1, money preferred
@@ -192,5 +206,6 @@ if __name__ == '__main__':
     graph = Graph(ROW * COL)
     generate_edges(availability, graph, c_arr, preference, ROW)
     print(graph.BellmanFord(85, 1))
+
 
 # time cost & money cost
