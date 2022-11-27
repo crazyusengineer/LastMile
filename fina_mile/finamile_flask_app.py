@@ -34,9 +34,10 @@ def register():
 
 @app.route('/loginAuth', methods=['GET', 'POST'])
 def loginAuth():
+    conn = get_db_connection()
     #grabs information from the forms
     username = request.form['email']
-    password = hashlib.md5(request.form['pw'].encode()).hexdigest()
+    password = hashlib.md5(request.form['pw'].esncode()).hexdigest()
 
     #cursor used to send queries
     cursor = conn.cursor()
