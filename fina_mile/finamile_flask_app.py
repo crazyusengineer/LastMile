@@ -64,6 +64,7 @@ def loginAuth():
 @app.route('/registerAuth', methods=['GET', 'POST'])
 def registerAuth():
     #grabs information from the forms
+    conn = get_db_connection()
     email = request.form['email']
     name = request.form['name']
     password = hashlib.md5(request.form['password'].encode()).hexdigest()
