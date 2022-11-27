@@ -58,3 +58,37 @@ def loginAuth():
         error = 'Invalid login or email'
         return render_template('login.html', error=error)
 
+
+#Authenticates the register
+@app.route('/registerAuth', methods=['GET', 'POST'])
+def registerAuth():
+    #grabs information from the forms
+    email = request.form['email']
+    name = request.form['name']
+    password = hashlib.md5(request.form['password'].encode()).hexdigest()
+    building_number = request.form['building_number']
+    street = request.form['street']
+    city = request.form['city']
+    state = request.form['state']
+    phone_number = request.form['phone_number']
+    
+    #cursor used to send queries
+    cursor = conn.cursor()
+    #executes query
+    query = 'SELECT * FROM user WHERE email = %s'
+    cursor.execute(query, (email))
+    #stores the results in a variable
+    data = cursor.fetchone()
+    #use fetchall() if you are expecting more than 1 data row
+    error = None
+    if(data):
+        #If the previous query returns data, then user exists
+        error = "This customer already exists"
+        return render_template('register.html', error = error)
+    else:
+        ins = 'insert into customer values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);'
+        cursor.execute(ins, (email, name, password, building_number, street, city, state, phone_number))
+        conn.commit() 
+        cursor.close()
+        return render_template('register.html', regPass = True)
+
