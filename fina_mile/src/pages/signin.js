@@ -27,15 +27,23 @@ const [errorMessages, setErrorMessages] = useState({});
   const [profileData, setProfileData] = useState(null)
 
   function getData() {  
-    axios({
-      method: "GET",
-      url:"/profile",
+    fetch('http://127.0.0.1:5000/profile', 
+    {
+      method: "POST",
+      mode: 'cors',
+      body: '{"priority": 1}'
     })
-    .then((response) => {
-      const res =response.data
+    .then(function(response) {
+      return(response.json())
+    })
+    .then((body) => {
+      console.log(body)
+      // const res =body.data
+      // console.log(response)
+      // console.log(response.body)
       setProfileData(({
-        profile_name: res.name,
-        about_me: res.about}))
+        profile_name: body.cost,
+        about_me: body.route}))
     }).catch((error) => {
       if (error.response) {
         console.log(error.response)

@@ -1,10 +1,10 @@
+import hashlib
 import random
+import json
 
 import psycopg2
-
-import hashlib
-
-from flask import Flask, request, jsonify, abort, session
+from flask import Flask, request, jsonify, abort
+from flask_cors import CORS
 
 from route import Graph, init_cost_arr, combine_arr, generate_blocks, get_availability, generate_edges
 
@@ -21,11 +21,13 @@ conn = psycopg2.connect(host='localhost',
                         user="postgres",
                         password="admin")
 
+cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
 def get_md5(s):
     md = hashlib.md5()
     md.update(s.encode('utf-8'))
     return md.hexdigest()
+
 
 # conn =
 
@@ -78,6 +80,7 @@ def login():
         error = 'Invalid login or username'
         abort(403)
 
+
 # @
 
 
@@ -87,9 +90,11 @@ def login():
 #     return params
 
 # this api asked the user input and returns back a jsonify string with {"cost":int,"route":list}
-@app.route('/profile', methods=['POST'])
+@app.route('/profile', methods=['POST', 'GET'])
 def cost_and_route():
-    preference = request.json.get('priority')
+    # print(request.data.priority)
+    print(json.loads(request.data))
+    preference = json.loads(request.data)['priority']
     if not (preference == 0 or preference == 1):
         abort(400)
     else:
@@ -113,7 +118,7 @@ def cost_and_route():
         return jsonify(
             cost=str(route_cost),
             route=route)
-
+        # return('test-debug')
 
 if __name__ == "__main__":
     app.run(host="127.0.0.1", debug=True)
