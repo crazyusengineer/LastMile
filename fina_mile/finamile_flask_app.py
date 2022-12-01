@@ -94,3 +94,48 @@ def registerAuth():
         cursor.close()
         return render_template('register.html', regPass = True)
 
+#Add a user preference for a package
+@app.route('/prefReq', methods=['GET', 'POST'])
+def prefReq():
+    conn = get_db_connection()
+    #grabs information from the forms
+    package_id = request.form['package_id']
+    preference = request.form['preference']
+    building_number = request.form['building_number']
+    street = request.form['street']
+    city = request.form['city']
+    state = request.form['state']
+    
+    #cursor used to send queries
+    cursor = conn.cursor()
+    #executes query
+   
+    ins = 'insert into customer values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);'
+    cursor.execute(ins, (package_id, preference, building_number, street, city, state))
+    conn.commit() 
+    cursor.close()
+    return render_template('register.html', regPass = True)
+
+#Add a user preference for a package
+@app.route('/packageHistory', methods=['GET', 'POST'])
+def packageHistory():
+    conn = get_db_connection()    
+    #cursor used to send queries
+    cursor = conn.cursor()
+    #executes query
+    query = 'SELECT * FROM package WHERE email = %s'
+    cursor.execute(query, (email))
+    #stores the results in a variable
+    data = cursor.fetchone()
+    #use fetchall() if you are expecting more than 1 data row
+    cursor.close()
+    error = None
+    if(data):
+        #creates a session for the the user
+        #session is a built in
+        session['username'] = username
+        return redirect(url_for('history'))
+    else:
+        #returns an error message to the html page
+        error = 'No package history found'
+        return render_template('history.html', error=error)
