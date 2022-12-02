@@ -137,18 +137,23 @@ def get_availability(comb_arr, row, col):
         row: row size of the comb_arr
         col: column size of the comb_arr
     return:
-        The total number of vertex, and available points with id
+        The total number of vertex, available points with id, and blocked points with id
     """
     ttl_vertex = 0
     accessible_vertex_coordinate = []
     accessible_vertex_id = []
     counter = 0
+    blocked_id = []
+
     for i in range(row):
         for j in range(col):
             if comb_arr[i][j] != [-1, -1]:
                 ttl_vertex += 1
                 accessible_vertex_coordinate.append([i, j])
                 accessible_vertex_id.append(counter)
+            # Add counter index to list of blocked intersections
+            else:
+                blocked_lst.append(counter)
             counter += 1
     return ttl_vertex, accessible_vertex_id
 
