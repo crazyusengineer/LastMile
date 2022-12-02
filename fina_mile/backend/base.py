@@ -111,7 +111,7 @@ def cost_and_route():
         m_arr, t_arr = init_cost_arr(ROW, COL)
         c_arr = combine_arr(m_arr, t_arr)
         generate_blocks(BLOCK_NUM, c_arr)
-        ttl_vertex, availability = get_availability(c_arr, ROW, COL)
+        ttl_vertex, availability, block_lst = get_availability(c_arr, ROW, COL)
         graph = Graph(ROW * COL)
         generate_edges(availability, graph, c_arr, preference, ROW)
         length = graph.V
@@ -121,7 +121,8 @@ def cost_and_route():
         route = graph.BellmanFord(start, end)[1]
         return jsonify(
             cost=str(route_cost),
-            route=route)
+            route=route,
+            block=block_lst)
         # return('test-debug')
 
 if __name__ == "__main__":
