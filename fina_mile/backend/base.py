@@ -3,7 +3,7 @@ import random
 import json
 
 import psycopg2
-from flask import Flask, request, jsonify, abort
+from flask import Flask, request, jsonify, abort, render_template
 from flask_cors import CORS
 
 from route import Graph, init_cost_arr, combine_arr, generate_blocks, get_availability, generate_edges
@@ -48,6 +48,10 @@ def index():
     cursor.execute(query)
     data = cursor.fetchall()
     return data
+
+# @app.route('/sign_up')
+# def register():
+#     return render_template('sign_up.html')
 
 
 @app.route('/login', methods=['POST', 'GET'])

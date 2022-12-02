@@ -58,7 +58,7 @@ class Graph:
                 return
 
         # print all distance
-        self.printArr(dist)
+        # self.printArr(dist)
         path = []
         current = dest
         while current:
@@ -205,7 +205,7 @@ if __name__ == '__main__':
     ttl_vertex, availability = get_availability(c_arr, ROW, COL)
     graph = Graph(ROW * COL)
     generate_edges(availability, graph, c_arr, preference, ROW)
-    print(graph.BellmanFord(85, 1))
+    # print(graph.BellmanFord(85, 1))
 
 
 # time cost & money cost
