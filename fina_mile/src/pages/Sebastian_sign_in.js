@@ -1,0 +1,160 @@
+import React, { useState } from "react";
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form'
+import 'bootstrap/dist/css/bootstrap.min.css';
+// import Navbar from './components/Navbar';
+import { BrowserRouter as Router, Routes, Route}
+    from 'react-router-dom';
+
+// import axios from "axios";
+// import "./index.css";
+function Login(){
+const [errorMessages, setErrorMessages] = useState({});
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  // User Login info
+  const database = [
+    {
+      username: "user1",
+      password: "pass1"
+    },
+    {
+      username: "user2",
+      password: "pass2"
+    }
+  ];
+
+  const [profileData, setProfileData] = useState(null)
+
+  function getData() {  
+    fetch('http://127.0.0.1:5000/profile', 
+    {
+      method: "POST",
+      mode: 'cors',
+      body: '{"priority": 1}'
+    })
+    .then(function(response) {
+      return(response.json())
+    })
+    .then((body) => {
+      console.log(body)
+      // const res =body.data
+      // console.log(response)
+      // console.log(response.body)
+      setProfileData(({
+        profile_name: body.cost,
+        about_me: body.route}))
+    }).catch((error) => {
+      if (error.response) {
+        console.log(error.response)
+        console.log(error.response.status)
+        console.log(error.response.headers)
+        }
+    })}
+
+  const errors = {
+    username: "invalid username",
+    pwd: "invalid password"
+  };
+
+  const handleSubmit = (event) => {
+    //Prevent page reload
+    event.preventDefault();
+
+    var { username, pwd } = document.forms[0];
+
+    // Find user login info
+    const userData = database.find((user) => user.username === username.value);
+
+    // Compare user info
+    if (userData) {
+      if (userData.password !== pwd.value) {
+        // Invalid password
+        setErrorMessages({ name: "pwd", message: errors.pwd });
+      } else {
+        setIsSubmitted(true);
+      }
+    } else {
+      // Username not found
+      setErrorMessages({ name: "username", message: errors.username });
+    }
+  };
+
+  const renderErrorMessage = (name) =>
+    name === errorMessages.name && (
+      <div className="error">{errorMessages.message}</div>
+    );
+
+  // JSX code for login form
+  const renderForm = (
+    <div className="form">
+      
+    
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+      	<center>Welcome to FinaMile!</center>
+	<br>
+	<form class="well form-horizontal" action=" " method="post"  		id="contact_form">
+	<fieldset>
+	<body background="https://cdn.wallpapersafari.com/85/53/guDl3n.png">
+    
+	</body>
+	<br>
+      	<Form onSubmit={handleSubmit}>
+        <div className="input-container">
+          <label><center> Username  </label>
+          <input type="text" name="username" required />
+          </center>
+        </div>
+	<br>
+        <div className="input-container">
+          <label><center>Password </label>
+          <input type="password" name="pwd" required />
+          </center>
+        </div>
+        <div className="button-container">
+            <center>
+	<br>  
+          <input type="submit" />
+          </center>
+        </div>
+      </Form>
+    </div>
+  );
+  return(
+    <div className="app">
+      <div className="login-form">
+        <div className="title">Sign In</div>
+        {isSubmitted ? <div>User is successfully logged in</div> : renderForm}
+      </div>
+      <header className="App-header">
+        <p>To get your profile details: </p><Button onClick={getData}>Click me</Button>
+        {profileData && <div>
+              <p>Profile name: {profileData.profile_name}</p>
+              <p>About me: {profileData.about_me}</p>
+            </div>
+        }
+      </header>
+    </div>
+    );
+  }
+
+export default Login;
