@@ -3,7 +3,7 @@ import random
 import json
 
 import psycopg2
-from flask import Flask, request, jsonify, abort, render_template
+from flask import Flask, request, jsonify, abort, render_template, session
 from flask_cors import CORS
 
 from route import Graph, init_cost_arr, combine_arr, generate_blocks, get_availability, generate_edges
@@ -44,7 +44,7 @@ def get_md5(s):
 @app.route('/', methods=['GET', 'POST'])
 def index():
     cursor = conn.cursor()
-    query = "SELECT * FROM users"
+    query = "SELECT * FROM user"
     cursor.execute(query)
     data = cursor.fetchall()
     return data
@@ -56,20 +56,14 @@ def index():
 
 def login():
     # email = request.form['email']
-    # username = request.form['username']
-    # password = request.form['pwd']
     # password = hashlib.md5(request.form['pwd'].esncode()).hexdigest()
-    username = "xijinping"
+    email = "xijinping"
     password = "xijinpingwansui"
-    # TODO: MD5 Function
-    # password = get_md5(password)
-    #
 
     cursor = conn.cursor()
     # executes query
-    query = "SELECT * FROM users WHERE username = '{}' and pwd = '{}'"
     query = 'SELECT * FROM user WHERE email = %s and password = %s'
-    cursor.execute(query.format(username, password))
+    cursor.execute(query.format(email, password))
     data = cursor.fetchone()
     # use fetchall() if you are expecting more than 1 data row
     cursor.close()
@@ -78,12 +72,12 @@ def login():
         # creates a session for the the user
         # session is a built in
         # TODO: Session
-        # session.permanent = False
-        # session['username'] = username
+        session.permanent = False
+        session['email'] = email
         return jsonify(data=data)
     else:
         # returns an error message to the html page
-        error = 'Invalid login or username'
+        error = 'Invalid login or email'
         abort(403)
 
 
@@ -156,6 +150,56 @@ def cost_and_route():
             route=route,
             block=block_lst)
         # return('test-debug')
+
+# Get a list of packages to show to user
+@app.route('/packageList', methods=['GET', 'POST'])
+def packageList():
+    
+    cursor = conn.cursor()
+    query = "SELECT * FROM package"
+    cursor.execute(query)
+    data = cursor.fetchall()
+    return jsonify(data)
+
+
+#Add a user preference for a package
+@app.route('/prefReq', methods=['GET', 'POST'])
+def prefReq():
+    #grabs information from the forms
+    email = session['email']
+    package_id = request.form['package_id']
+    preference = request.form['preference']
+    
+    #cursor used to send queries
+    cursor = conn.cursor()
+    #executes query
+   
+    ins = 'insert into user_package values(%s, %s, %s, %s);'
+    cursor.execute(ins, (email, package_id, preference))
+    conn.commit() 
+    cursor.close()
+    return render_template('requestPackage.html', reqPass = True)
+
+#Add a user preference for a package
+@app.route('/packageHistory', methods=['GET', 'POST'])
+def packageHistory():
+    #cursor used to send queries
+    cursor = conn.cursor()
+    #executes query
+    query = 'SELECT * FROM user_package WHERE email = %s'
+    cursor.execute(query, (session['email']))
+    #stores the results in a variable
+    data = cursor.fetchall()
+    #use fetchall() if you are expecting more than 1 data row
+    cursor.close()
+    error = None
+    if(data):
+        return jsonify(data)
+    else:
+        #returns an error message to the html page
+        error = 'No package history found'
+        return render_template('history.html', error=error)
+
 
 if __name__ == "__main__":
     app.run(host="127.0.0.1", debug=True)

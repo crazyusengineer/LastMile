@@ -12,6 +12,7 @@ CREATE TABLE user(
 CREATE TABLE user_package(
 	email VARCHAR(256),
 	packageId INT,
+	preference VARCHAR(256),
 	requestTime DATETIME,
 	PRIMARY KEY (email, packageId),	
 	FOREIGN KEY (userId)

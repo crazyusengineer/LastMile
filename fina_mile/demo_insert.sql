@@ -7,10 +7,10 @@ insert into package values(25, '311', 'Jay St', 'Brooklyn', 'New York');
 insert into package values(24, '251', 'Palm St', 'Miami', 'Florida');
 insert into package values(29, '251', '14 St', 'Manhattan', 'New York');
 
-insert into user_package values('testcustomer@nyu.edu', 25, '2022-06-12 13:25:25');
-insert into user_package values('testcustomer@nyu.edu', 24, '2022-07-12 13:25:25');
+insert into user_package values('testcustomer@nyu.edu', 25, 'time', '2022-06-12 13:25:25');
+insert into user_package values('testcustomer@nyu.edu', 24, 'time', '2022-07-12 13:25:25');
 
-insert into user_package values('user1@nyu.edu', 25, '2022-06-10 13:25:25');
-insert into user_package values('user1@nyu.edu', 29, '2022-06-12 13:25:25');
+insert into user_package values('user1@nyu.edu', 25, 'time', '2022-06-10 13:25:25');
+insert into user_package values('user1@nyu.edu', 29, 'money', '2022-06-12 13:25:25');
 
 
