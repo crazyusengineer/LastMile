@@ -1,6 +1,6 @@
 CREATE TABLE user(
-	name VARCHAR(256),
 	email VARCHAR(256),
+	name VARCHAR(256),
 	pwd VARCHAR(256),
 	building_number varchar(50),
 	street varchar(50),
@@ -12,7 +12,6 @@ CREATE TABLE user(
 CREATE TABLE user_package(
 	email VARCHAR(256),
 	packageId INT,
-	status VARCHAR(50),
 	requestTime DATETIME,
 	PRIMARY KEY (email, packageId),	
 	FOREIGN KEY (userId)
