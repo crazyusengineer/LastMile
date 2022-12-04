@@ -54,19 +54,21 @@ def index():
 #     return render_template('sign_up.html')
 
 
-@app.route('/login', methods=['POST', 'GET'])
 def login():
     # email = request.form['email']
     # username = request.form['username']
     # password = request.form['pwd']
+    # password = hashlib.md5(request.form['pwd'].esncode()).hexdigest()
     username = "xijinping"
     password = "xijinpingwansui"
     # TODO: MD5 Function
     # password = get_md5(password)
+    #
 
     cursor = conn.cursor()
     # executes query
     query = "SELECT * FROM users WHERE username = '{}' and pwd = '{}'"
+    query = 'SELECT * FROM user WHERE email = %s and password = %s'
     cursor.execute(query.format(username, password))
     data = cursor.fetchone()
     # use fetchall() if you are expecting more than 1 data row
@@ -85,7 +87,37 @@ def login():
         abort(403)
 
 
-# @
+# Authenticates the register
+@app.route('/registerAuth', methods=['GET', 'POST'])
+def registerAuth():
+    #grabs information from the forms
+    email = request.form['email']
+    name = request.form['name']
+    password = hashlib.md5(request.form['pwd'].encode()).hexdigest()
+    building_number = request.form['building_number']
+    street = request.form['street']
+    city = request.form['city']
+    state = request.form['state']
+    
+    #cursor used to send queries
+    cursor = conn.cursor()
+    #executes query
+    query = 'SELECT * FROM user WHERE email = %s'
+    cursor.execute(query, (email))
+    #stores the results in a variable
+    data = cursor.fetchone()
+    #use fetchall() if you are expecting more than 1 data row
+    error = None
+    if(data):
+        #If the previous query returns data, then user exists
+        error = "This customer already exists"
+        return render_template('register.html', error = error)
+    else:
+        ins = 'insert into customer values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);'
+        cursor.execute(ins, (email, name, password, building_number, street, city, state))
+        conn.commit() 
+        cursor.close()
+        return render_template('register.html', regPass = True)
 
 
 # @api.route('/route')
