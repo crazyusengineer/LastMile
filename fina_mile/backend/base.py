@@ -41,20 +41,18 @@ def get_md5(s):
 #
 #     return response_body
 
-@app.route('/', methods=['GET', 'POST'])
+"""
+ @app.route('/', methods=['GET', 'POST'])
 def index():
     cursor = conn.cursor()
-    query = "SELECT * FROM user"
+    query = "SELECT * FROM users"
     cursor.execute(query)
     data = cursor.fetchall()
-    return data
+    return jsonify(data)
+"""
 
-# @app.route('/sign_up')
-# def register():
-#     return render_template('sign_up.html')
-
-
-def login():
+@app.route('/loginAuth', methods=['GET', 'POST'])
+def loginAuth():
     email = request.form['email']
     password = hashlib.md5(request.form['pwd'].esncode()).hexdigest()
     #email = "xijinping"
@@ -62,7 +60,7 @@ def login():
 
     cursor = conn.cursor()
     # executes query
-    query = 'SELECT * FROM user WHERE email = %s and password = %s'
+    query = 'SELECT * FROM users WHERE email = %s and password = %s'
     cursor.execute(query.format(email, password))
     data = cursor.fetchone()
     # use fetchall() if you are expecting more than 1 data row
@@ -96,7 +94,7 @@ def registerAuth():
     #cursor used to send queries
     cursor = conn.cursor()
     #executes query
-    query = 'SELECT * FROM user WHERE email = %s'
+    query = 'SELECT * FROM users WHERE email = %s'
     cursor.execute(query, (email))
     #stores the results in a variable
     data = cursor.fetchone()
@@ -104,10 +102,10 @@ def registerAuth():
     error = None
     if(data):
         #If the previous query returns data, then user exists
-        error = "This customer already exists"
+        error = "This user already exists"
         return render_template('register.html', error = error)
     else:
-        ins = 'insert into customer values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);'
+        ins = 'insert into users values(%s, %s, %s, %s, %s, %s, %s);'
         cursor.execute(ins, (email, name, password, building_number, street, city, state))
         conn.commit() 
         cursor.close()

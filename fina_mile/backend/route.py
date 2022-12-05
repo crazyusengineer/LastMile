@@ -143,7 +143,7 @@ def get_availability(comb_arr, row, col):
     accessible_vertex_coordinate = []
     accessible_vertex_id = []
     counter = 0
-    blocked_id = []
+    blocked_lst = []
 
     for i in range(row):
         for j in range(col):
