@@ -22,7 +22,7 @@ CREATE TABLE users_package(
 	email VARCHAR(256),
 	packageId INT,
 	preference VARCHAR(256),
-	requestTime TIMESTAMP,
+	requestTime TIMESTAMP DEFAULT now(), 
 	PRIMARY KEY (email, packageId),	
 	FOREIGN KEY (email)
 		REFERENCES users (email),

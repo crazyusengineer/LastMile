@@ -19,7 +19,7 @@ COL = 10
 conn = psycopg2.connect(host='localhost',
                         database='fina_mile',
                         user="postgres",
-                        password="admin")
+                        password="password")
 
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
@@ -55,10 +55,10 @@ def index():
 
 
 def login():
-    # email = request.form['email']
-    # password = hashlib.md5(request.form['pwd'].esncode()).hexdigest()
-    email = "xijinping"
-    password = "xijinpingwansui"
+    email = request.form['email']
+    password = hashlib.md5(request.form['pwd'].esncode()).hexdigest()
+    #email = "xijinping"
+    #password = "xijinpingwansui"
 
     cursor = conn.cursor()
     # executes query
@@ -174,7 +174,7 @@ def prefReq():
     cursor = conn.cursor()
     #executes query
    
-    ins = 'insert into user_package values(%s, %s, %s, %s);'
+    ins = 'insert into users_package values(%s, %s, %s);'
     cursor.execute(ins, (email, package_id, preference))
     conn.commit() 
     cursor.close()
@@ -186,7 +186,7 @@ def packageHistory():
     #cursor used to send queries
     cursor = conn.cursor()
     #executes query
-    query = 'SELECT * FROM user_package WHERE email = %s'
+    query = 'SELECT * FROM users_package WHERE email = %s'
     cursor.execute(query, (session['email']))
     #stores the results in a variable
     data = cursor.fetchall()
