@@ -1,4 +1,4 @@
-CREATE TABLE user(
+CREATE TABLE users(
 	email VARCHAR(256),
 	name VARCHAR(256),
 	pwd VARCHAR(256),
@@ -9,18 +9,6 @@ CREATE TABLE user(
 	PRIMARY KEY (email)	
 );
 
-CREATE TABLE user_package(
-	email VARCHAR(256),
-	packageId INT,
-	preference VARCHAR(256),
-	requestTime DATETIME,
-	PRIMARY KEY (email, packageId),	
-	FOREIGN KEY (userId)
-		REFERENCES users (userId)
-	FOREIGN KEY (packageId)
-		REFERENCES package (packageId)
-);
-
 CREATE TABLE package(
 	packageId INT NOT NULL,
 	building_number varchar(50),
@@ -28,4 +16,16 @@ CREATE TABLE package(
 	city varchar(50),
 	state varchar(50),
 	PRIMARY KEY (packageId)
+);
+
+CREATE TABLE users_package(
+	email VARCHAR(256),
+	packageId INT,
+	preference VARCHAR(256),
+	requestTime TIMESTAMP,
+	PRIMARY KEY (email, packageId),	
+	FOREIGN KEY (email)
+		REFERENCES users (email),
+	FOREIGN KEY (packageId)
+		REFERENCES package (packageId)
 );
