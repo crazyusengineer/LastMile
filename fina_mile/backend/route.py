@@ -58,12 +58,12 @@ class Graph:
                 return
 
         # print all distance
-        self.printArr(dist)
+        # self.printArr(dist)
         path = []
         current = dest
         while current:
             path.append(current)
-            print(current)
+            # print(current)
             current = pred[current]
         path = path[::-1]
         if src not in path:
@@ -137,20 +137,25 @@ def get_availability(comb_arr, row, col):
         row: row size of the comb_arr
         col: column size of the comb_arr
     return:
-        The total number of vertex, and available points with id
+        The total number of vertex, available points with id, and blocked points with id
     """
     ttl_vertex = 0
     accessible_vertex_coordinate = []
     accessible_vertex_id = []
     counter = 0
+    blocked_lst = []
+
     for i in range(row):
         for j in range(col):
             if comb_arr[i][j] != [-1, -1]:
                 ttl_vertex += 1
                 accessible_vertex_coordinate.append([i, j])
                 accessible_vertex_id.append(counter)
+            # Add counter index to list of blocked intersections
+            else:
+                blocked_lst.append(counter)
             counter += 1
-    return ttl_vertex, accessible_vertex_id
+    return ttl_vertex, accessible_vertex_id, blocked_lst
 
 
 def generate_edges(accessible_vertex, g, comb_arr, preference, r_len):
@@ -183,13 +188,13 @@ def generate_edges(accessible_vertex, g, comb_arr, preference, r_len):
             g.addEdge(id, down, comb_arr[x][y][preference])
             # print("edge added")
         if right in accessible_vertex:
-            if id % r_len != r_len - 1:
+            if id % r_len != 0:
                 x = right // r_len
                 y = right % r_len
                 g.addEdge(id, right, comb_arr[x][y][preference])
                 # print("edge added")
         if left in accessible_vertex:
-            if id % r_len != r_len:
+            if id % r_len != 1:
                 x = left // r_len
                 y = left % r_len
                 g.addEdge(id, left, comb_arr[x][y][preference])
